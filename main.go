@@ -30,7 +30,7 @@ func main() {
 	for {
 		conn, err := listener.Accept()
 		checkErr(err, "failed to accept connection: ")
-		
+
 		server := conf.Servers[getRand(len(conf.Servers))]
 		log.Printf("server=%s", server)
 
@@ -50,7 +50,7 @@ func proxy(server string, conn net.Conn) error {
 	// Load Balancer -> Server
 	go io.Copy(conn, conn2)
 
-	// Server -> Load balancer
+	// Server -> Load Balancer
 	go io.Copy(conn2, conn)
 
 	return nil
@@ -78,7 +78,11 @@ func getRand(max int) int {
 }
 
 type Conf struct {
-	Name     string   `json:"name"`
-	Listener string   `json:"listener"`
-	Servers  []string `json:"servers"`
+	Name     string  `json:"name"`
+	Listener string  `json:"listener"`
+	Servers  servers `json:"servers"`
 }
+
+type (
+	servers []string
+)
